@@ -65,21 +65,16 @@ const rocks: RockType[] = [
 const amount = ref(0)
 const allowed = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
 function add() {
-  let item = cart.value.find(o => o.name === myChoice.value.name)
   const itemIndex = cart.value.findIndex(o => o.name === myChoice.value.name)
-  console.log(itemIndex)
   if (myChoice.value.name != "" && amount.value != 0) {
    if (itemIndex === -1) {
       cart.value.push({ name: myChoice.value.name, price: myChoice.value.price * amount.value, amount: amount.value})
-      console.log("item", item)
     } else {
       const amountForCart = cart.value[itemIndex].amount + amount.value 
       if (amountForCart <= 20 ) {
-        console.log(cart.value[itemIndex])
         var count = cart.value[itemIndex].amount += amount.value
         var price = count * myChoice.value.price
         cart.value.splice(itemIndex, 1, { name: myChoice.value.name, price: price, amount: count})
-        console.log(cart.value[itemIndex])
       } else {
         window.alert("cannot purchase more than twenty of each rock")
       }
@@ -120,16 +115,16 @@ price: ${{myChoice.price}}
     <option v-for="rock in rocks" :key="rock.name" :value="rock">{{ rock.name }}</option>
   </select>
    <select v-model="amount">
-  <option disabled hidden value="">quantity</option>
-  <option v-for= "type in allowed" :key="type" :value="type">{{type}}
-  </option>
+    <option disabled value="">quantity</option>
+    <option v-for= "type in allowed" :key="type" :value="type">{{type}}
+    </option>
   </select>
   <br>
   <button @click="add()">add ({{myChoice.name}}) to cart</button>
   <h2> cart</h2>
   <hr>
   <p v-for="item in cart" :key="item.name">{{item.amount}} {{ item.name }} ${{item.price}}</p>
-  <p>subtotal {{ subtotal}}</p>
+  <p>subtotal {{ subtotal }}</p>
 </template>
 
 <style scoped>
