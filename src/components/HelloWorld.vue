@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 interface RockType {
   name: string;
   hardness: number;
@@ -92,7 +92,14 @@ function add() {
     }
     amount.value = 0
   }
-} 
+}
+const subtotal = computed(() => {
+  let price = 0
+  cart.value.forEach((rock) => {
+   price += rock.price
+  })
+  return price
+})
 </script>
 
 <template>
@@ -122,6 +129,7 @@ price: ${{myChoice.price}}
   <h2> cart</h2>
   <hr>
   <p v-for="item in cart" :key="item.name">{{item.amount}} {{ item.name }} ${{item.price}}</p>
+  <p>subtotal {{ subtotal}}</p>
 </template>
 
 <style scoped>
