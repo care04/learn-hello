@@ -1,0 +1,131 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+interface RockType {
+  name: string;
+  hardness: number;
+  location: string;
+  price: number;
+}
+interface CartRockType {
+  name: string;
+  price: number;
+  amount: number;
+}
+const myChoice = ref<RockType>({
+  name: "",
+  hardness: 0,
+  location: "",
+  price: 0
+})
+const cart = ref<[CartRockType]>([{
+  name: "",
+  price: 0,
+  amount: 0
+}])
+const rocks: RockType[] = [
+
+  {
+    name: 'granite',
+    hardness: 7,
+    location: 'Seashore',
+    price: 12,
+  },
+  {
+    name: 'Topaz',
+    hardness: 8,
+    location: 'Mines',
+    price: 22,
+  },
+  {
+    name: 'Quartz',
+    hardness: 7.5,
+    location: 'Sand',
+    price: 8,
+  },
+  {
+    name: 'Sandstone',
+    hardness: 6,
+    location: 'lakeshore',
+    price: 13,
+  },
+  {
+    name: 'Marble',
+    hardness: 2,
+    location: 'rockface',
+    price: 15,
+  },
+  {
+    name: 'limestone',
+    hardness: 3,
+    location: "soil",
+    price: 4,
+  },
+
+];
+const amount = ref(0)
+const allowed = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+function add() {
+  let item = cart.value.find(o => o.name === myChoice.value.name)
+  const itemIndex = cart.value.findIndex(o => o.name === myChoice.value.name)
+  console.log(itemIndex)
+  if (myChoice.value.name != "" && amount.value != 0) {
+   if (itemIndex === -1) {
+      cart.value.push({ name: myChoice.value.name, price: myChoice.value.price * amount.value, amount: amount.value})
+      console.log("item", item)
+    } else {
+      const amountForCart = cart.value[itemIndex].amount + amount.value 
+      if (amountForCart <= 20 ) {
+        console.log(cart.value[itemIndex])
+        var count = cart.value[itemIndex].amount += amount.value
+        var price = count * myChoice.value.price
+        cart.value.splice(itemIndex, 1, { name: myChoice.value.name, price: price, amount: count})
+        console.log(cart.value[itemIndex])
+      } else {
+        window.alert("cannot purchase more than twenty of each rock")
+      }
+    }
+    myChoice.value = {
+      name: "",
+      hardness: 0,
+      location: "",
+      price: 0
+    }
+    amount.value = 0
+  }
+} 
+</script>
+
+<template>
+<div>
+<h1>Choice</h1>
+<hr>
+Rock: {{myChoice.name}}
+<br>
+hardness: {{myChoice.hardness}}
+<br>
+location: {{myChoice.location}}
+<br>
+price: ${{myChoice.price}}
+<br>
+</div>
+  <select v-model="myChoice">
+    <option disabled hidden value=""> Select rock type</option>
+    <option v-for="rock in rocks" :key="rock.name" :value="rock">{{ rock.name }}</option>
+  </select>
+   <select v-model="amount">
+  <option disabled hidden value="">quantity</option>
+  <option v-for= "type in allowed" :key="type" :value="type">{{type}}
+  </option>
+  </select>
+  <br>
+  <button @click="add()">add ({{myChoice.name}}) to cart</button>
+  <h2> cart</h2>
+  <hr>
+  <p v-for="item in cart" :key="item.name">{{item.amount}} {{ item.name }} ${{item.price}}</p>
+</template>
+
+<style scoped>
+.read-the-docs {
+  color: #888;
+}
+</style>
