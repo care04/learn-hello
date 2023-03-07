@@ -63,7 +63,6 @@ const rocks: RockType[] = [
 
 ];
 const amount = ref(0)
-const allowed = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
 function add() {
   const itemIndex = cart.value.findIndex(o => o.name === myChoice.value.name)
   if (myChoice.value.name != "" && amount.value != 0) {
@@ -76,6 +75,7 @@ function add() {
         var price = count * myChoice.value.price
         cart.value.splice(itemIndex, 1, { name: myChoice.value.name, price: price, amount: count})
       } else {
+        cart.value.splice(itemIndex, 1, { name: myChoice.value.name, price: 20 * myChoice.value.price, amount: 20})
         window.alert("cannot purchase more than twenty of each rock")
       }
     }
@@ -116,7 +116,7 @@ price: ${{myChoice.price}}
   </select>
    <select v-model="amount">
     <option disabled value="">quantity</option>
-    <option v-for= "type in allowed" :key="type" :value="type">{{type}}
+    <option v-for= "type in 20" :key="type" :value="type">{{type}}
     </option>
   </select>
   <br>
